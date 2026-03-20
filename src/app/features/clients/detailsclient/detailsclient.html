@@ -1,0 +1,36 @@
+<section class="page-stack">
+      <a class="back-link" routerLink="/app/clients">← Retour à la liste des clients</a>
+
+      @if (store.loading()) {
+        <section class="card">Chargement du client...</section>
+      } @else if (store.error()) {
+        <section class="card error">{{ store.error() }}</section>
+      } @else if (store.selected(); as client) {
+        <section class="hero card">
+          <div>
+            <p class="eyebrow">Client</p>
+            <h2>{{ client.companyName }}</h2>
+            <p class="muted">Contact principal : {{ client.contactName }}</p>
+          </div>
+        </section>
+
+        <section class="details-grid">
+          <article class="card">
+            <p class="label">Email</p>
+            <strong>{{ client.email }}</strong>
+          </article>
+
+          <article class="card">
+            <p class="label">Téléphone</p>
+            <strong>{{ client.phone }}</strong>
+          </article>
+
+          <article class="card full-width">
+            <p class="label">Adresse</p>
+            <strong>{{ client.address }}</strong>
+          </article>
+        </section>
+      } @else {
+        <section class="card">Client introuvable.</section>
+      }
+    </section>

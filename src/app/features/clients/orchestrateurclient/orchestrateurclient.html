@@ -1,0 +1,62 @@
+
+    <section class="page-stack">
+      <header class="page-header card">
+        <div>
+          <p class="eyebrow">Clients</p>
+          <h3>Référentiel clients</h3>
+          <p class="muted">
+            Gestion des entreprises, contacts et données de coordination branchée sur `/api/clients`.
+          </p>
+        </div>
+
+        @if (store.canManage()) {
+          <button type="button" class="primary" (click)="openCreate()">Nouveau client</button>
+        }
+      </header>
+
+      <section class="toolbar card">
+        <label class="search-box">
+          <span>Recherche</span>
+          <input
+            type="text"
+            [ngModel]="store.filters().search"
+            (ngModelChange)="store.setSearch($event)"
+            placeholder="Société, contact, email, téléphone"
+          />
+        </label>
+      </section>
+
+      @if (store.error()) {
+        <section class="alert error">{{ store.error() }}</section>
+      }
+
+      <app-allclient
+        [clients]="store.filteredItems()"
+        [canManage]="store.canManage()"
+        [canDelete]="store.canDelete()"
+        (edit)="openEdit($event)"
+        (remove)="remove($event)"
+      />
+
+      @if (isFormOpen()) {
+        <section class="overlay" (click)="closeForm()">
+          <div class="drawer" (click)="$event.stopPropagation()">
+            <div class="drawer-header">
+              <div>
+                <p class="eyebrow">{{ editingClient() ? 'Modification' : 'Création' }}</p>
+                <h3>{{ editingClient() ? 'Mettre à jour le client' : 'Créer un client' }}</h3>
+              </div>
+              <button type="button" class="ghost" (click)="closeForm()">Fermer</button>
+            </div>
+
+            <app-addclient
+              [client]="editingClient()"
+              [disabled]="store.saving()"
+              [submitLabel]="editingClient() ? 'Mettre à jour' : 'Créer'"
+              (submit)="save($event)"
+              (cancel)="closeForm()"
+            />
+          </div>
+        </section>
+      }
+    </section>

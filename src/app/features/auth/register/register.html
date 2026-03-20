@@ -1,0 +1,86 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Dépôt un compte</h1>
+      <p>Rejoignez Recouvra+ et commencez à gérer vos recouvrements</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert error">{{ errorMessage() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+      <div class="form-group">
+        <label for="name">Nom complet</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Jean Dupont"
+          [attr.aria-invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+        />
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <span class="error-text">Le nom est requis (minimum 2 caractères)</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="jean@example.com"
+          [attr.aria-invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+        />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <span class="error-text">Veuillez entrer une adresse e-mail valide</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Minimum 8 caractères"
+          [attr.aria-invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+        />
+        @if (form.get('password')?.invalid && form.get('password')?.touched) {
+          <span class="error-text">Le mot de passe doit contenir au minimum 8 caractères</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Confirmer votre mot de passe"
+          [attr.aria-invalid]="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched"
+        />
+        @if (form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched) {
+          @if (form.errors?.['passwordMismatch']) {
+            <span class="error-text">Les mots de passe ne correspondent pas</span>
+          } @else {
+            <span class="error-text">Veuillez confirmer votre mot de passe</span>
+          }
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="form.invalid || isSubmitting()"
+      >
+        {{ isSubmitting() ? 'Inscription en cours...' : 'Créer un compte' }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Vous avez déjà un compte ? <a routerLink="/login">Connectez-vous</a></p>
+    </div>
+  </div>
+</div>

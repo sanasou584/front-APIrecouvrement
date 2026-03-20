@@ -1,0 +1,37 @@
+<form class="client-form" [formGroup]="form" (ngSubmit)="submitForm()">
+      <div class="grid two">
+        <label>
+          <span>Société</span>
+          <input type="text" formControlName="companyName" />
+        </label>
+
+        <label>
+          <span>Contact</span>
+          <input type="text" formControlName="contactName" />
+        </label>
+      </div>
+
+      <div class="grid two">
+        <label>
+          <span>Email</span>
+          <input type="email" formControlName="email" />
+        </label>
+
+        <label>
+          <span>Téléphone</span>
+          <input type="text" formControlName="phone" />
+        </label>
+      </div>
+
+      <label>
+        <span>Adresse</span>
+        <textarea rows="4" formControlName="address"></textarea>
+      </label>
+
+      <div class="actions">
+        <button type="button" class="ghost" (click)="cancel.emit()">Annuler</button>
+        <button type="submit" [disabled]="form.invalid || disabled()">
+          {{ submitLabel() }}
+        </button>
+      </div>
+    </form>

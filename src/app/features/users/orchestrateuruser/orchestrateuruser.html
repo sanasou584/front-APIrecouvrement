@@ -1,0 +1,62 @@
+<section class="page-stack">
+  <header class="page-header card">
+    <div>
+      <p class="eyebrow">Utilisateurs</p>
+      <h3>Administration des utilisateurs</h3>
+      <p class="muted">
+        Gestion des comptes utilisateurs et attribution des rôles via `/api/users`.
+      </p>
+    </div>
+
+    @if (store.canManage()) {
+      <button type="button" class="primary" (click)="openCreate()">Nouvel utilisateur</button>
+    }
+  </header>
+
+  <section class="toolbar card">
+    <label class="search-box">
+      <span>Recherche</span>
+      <input
+        type="text"
+        [ngModel]="store.filters().search"
+        (ngModelChange)="store.setSearch($event)"
+        placeholder="Nom, email, téléphone, rôle"
+      />
+    </label>
+  </section>
+
+  @if (store.error()) {
+    <section class="alert error">{{ store.error() }}</section>
+  }
+
+  <app-alluser
+    [users]="store.filteredItems()"
+    [canManage]="store.canManage()"
+    [canDelete]="store.canDelete()"
+    (edit)="openEdit($event)"
+    (remove)="remove($event)"
+  />
+
+  @if (isFormOpen()) {
+    <section class="overlay" (click)="closeForm()">
+      <div class="drawer" (click)="$event.stopPropagation()">
+        <div class="drawer-header">
+          <div>
+            <p class="eyebrow">{{ editingUser() ? 'Modification' : 'Création' }}</p>
+            <h3>{{ editingUser() ? 'Mettre à jour l\'utilisateur' : 'Créer un utilisateur' }}</h3>
+          </div>
+          <button type="button" class="ghost" (click)="closeForm()">Fermer</button>
+        </div>
+
+        <div class="drawer-content">
+          <app-adduser
+            [user]="editingUser()"
+            [saving]="store.saving()"
+            (close)="closeForm()"
+            (submit)="save($event)"
+          />
+        </div>
+      </div>
+    </section>
+  }
+</section>

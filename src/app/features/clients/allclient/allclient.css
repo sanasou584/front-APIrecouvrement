@@ -1,0 +1,129 @@
+.table-shell {
+  overflow-x: auto;
+  border-radius: 8px;
+  background: var(--surface-primary);
+  border: 1px solid var(--border-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-primary);
+}
+
+th,
+td {
+  padding: 16px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+th {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  background: var(--surface-secondary);
+}
+
+.entity-link {
+  color: #4183ff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.entity-link:hover {
+  color: #5a9eff;
+  text-decoration: underline;
+}
+
+.actions-cell {
+  width: 220px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.actions-cell button {
+  margin-left: 8px;
+}
+
+button {
+  height: 38px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 16px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+button.ghost {
+  background: linear-gradient(135deg, #4183ff, #5a9eff);
+  box-shadow: 0 2px 8px rgba(65, 131, 255, 0.3);
+}
+
+button.ghost:hover {
+  background: linear-gradient(135deg, #3070dd, #4a8eee);
+  box-shadow: 0 4px 12px rgba(65, 131, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+button.ghost:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(65, 131, 255, 0.3);
+}
+
+button.danger {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+button.danger:hover {
+  background: linear-gradient(135deg, #dc2626, #e85d5d);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+button.danger:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(239, 68, 68, 0.3);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.empty-state {
+  text-align: center !important;
+  color: var(--text-muted);
+  padding: 32px 16px;
+}
+
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .actions-cell button {
+    padding: 0 12px;
+    font-size: 0.75rem;
+    margin-left: 4px;
+    text-align: center;
+    color: #94a3b8;
+  }
+}
+        
+
