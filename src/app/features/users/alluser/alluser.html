@@ -1,0 +1,41 @@
+<div class="table-shell">
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Rôle</th>
+        <th>Statut</th>
+        <th class="actions-cell">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users(); track user._id) {
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone || '-' }}</td>
+          <td>{{ getRoleLabel(user.role) }}</td>
+          <td>
+            <span [class.active]="user.isActive" [class.inactive]="!user.isActive">
+              {{ user.isActive ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            @if (canManage()) {
+              <button type="button" class="ghost" (click)="edit.emit(user)">Modifier</button>
+            }
+            @if (canDelete()) {
+              <button type="button" class="danger" (click)="remove.emit(user)">Supprimer</button>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6" class="empty-state">Aucun utilisateur trouvé.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

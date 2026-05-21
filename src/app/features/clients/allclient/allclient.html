@@ -1,0 +1,37 @@
+<div class="table-shell">
+      <table>
+        <thead>
+          <tr>
+            <th>Société</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th class="actions-cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (client of clients(); track client._id) {
+            <tr>
+              <td>
+                <a class="entity-link" [routerLink]="['/app/clients', client._id]">{{ client.companyName }}</a>
+              </td>
+              <td>{{ client.contactName }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone }}</td>
+              <td class="actions-cell">
+                @if (canManage()) {
+                  <button type="button" class="ghost" (click)="edit.emit(client)">Modifier</button>
+                }
+                @if (canDelete()) {
+                  <button type="button" class="danger" (click)="remove.emit(client)">Supprimer</button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-state">Aucun client trouvé.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>

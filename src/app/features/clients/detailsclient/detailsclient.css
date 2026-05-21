@@ -1,0 +1,45 @@
+:host {
+        display: block;
+      }
+      .page-stack {
+        display: grid;
+        gap: 20px;
+      }
+      .back-link {
+        color: #bfdbfe;
+        text-decoration: none;
+      }
+      .details-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+      }
+      .card {
+        border-radius: 24px;
+        padding: 22px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        color: #e2e8f0;
+      }
+      .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+      }
+      .eyebrow,
+      .label,
+      .muted {
+        color: #94a3b8;
+      }
+      .full-width {
+        grid-column: span 12;
+      }
+      .details-grid > .card:not(.full-width) {
+        grid-column: span 6;
+      }
+      @media (max-width: 720px) {
+        .details-grid > .card:not(.full-width),
+        .full-width {
+          grid-column: span 12;
+        }
+      }

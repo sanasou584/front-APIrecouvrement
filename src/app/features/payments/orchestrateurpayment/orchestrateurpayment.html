@@ -1,0 +1,59 @@
+<section class="page-stack">
+  <header class="page-header card">
+    <div>
+      <p class="eyebrow">Paiements</p>
+      <h3>Encaissements et suivi</h3>
+      <p class="muted">
+        Gestion des paiements branchée sur `/api/payments`.
+      </p>
+    </div>
+
+    @if (store.canManage()) {
+      <button type="button" class="primary" (click)="openCreate()">Nouveau paiement</button>
+    }
+  </header>
+
+  <section class="toolbar card">
+    <label class="search-box">
+      <span>Recherche</span>
+      <input
+        type="text"
+        [ngModel]="store.filters().search"
+        (ngModelChange)="store.setSearch($event)"
+        placeholder="Facture, mode, référence, notes"
+      />
+    </label>
+  </section>
+
+  @if (store.error()) {
+    <section class="alert error">{{ store.error() }}</section>
+  }
+
+  <app-payment-list
+    [payments]="store.filteredItems()"
+    [canDelete]="store.canDelete()"
+    [deleting]="store.deleting()"
+    (remove)="remove($event)"
+  />
+
+  @if (isFormOpen()) {
+    <section class="overlay" (click)="closeForm()">
+      <div class="drawer" (click)="$event.stopPropagation()">
+        <div class="drawer-header">
+          <div>
+            <p class="eyebrow">Créer un paiement</p>
+            <h3>Enregistrer un encaissement</h3>
+          </div>
+          <button type="button" class="ghost" (click)="closeForm()">Fermer</button>
+        </div>
+
+        <app-payment-form
+          [disabled]="store.saving()"
+          [submitLabel]="'Enregistrer la transaction'"
+          (submit)="save($event)"
+          (cancel)="closeForm()"
+        />
+      </div>
+    </section>
+  }
+</section>

@@ -1,0 +1,39 @@
+<section class="login-page">
+      <div class="hero">
+        <span class="eyebrow">Angular 20 · Standalone · Signals</span>
+        <h1>Recouvra+</h1>
+        <p>
+          Console moderne de gestion du recouvrement, conçue pour suivre les clients,
+          factures, paiements, actions et indicateurs de performance.
+        </p>
+      </div>
+
+      <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+        <div>
+          <h2>Connexion</h2>
+          <p>Accès sécurisé par JWT Bearer</p>
+        </div>
+
+        <label>
+          <span>Email</span>
+          <input type="email" formControlName="email" placeholder="admin@test.com" />
+        </label>
+
+        <label>
+          <span>Mot de passe</span>
+          <input type="password" formControlName="password" placeholder="123456" />
+        </label>
+
+        @if (errorMessage()) {
+          <div class="error-box">{{ errorMessage() }}</div>
+        }
+
+        <button type="submit" [disabled]="form.invalid || authStore.loading()">
+          {{ authStore.loading() ? 'Connexion...' : 'Se connecter' }}
+        </button>
+
+        <div class="login-footer">
+          <p>Vous n'avez pas de compte ? <a routerLink="/register">Créer un compte</a></p>
+        </div>
+      </form>
+    </section>

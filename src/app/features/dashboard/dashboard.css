@@ -1,0 +1,35 @@
+:host {
+        display: block;
+      }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 20px;
+      }
+      .card {
+        border-radius: 24px;
+        padding: 22px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        color: #e2e8f0;
+      }
+      .hero-card {
+        grid-column: span 12;
+      }
+      .stat-card {
+        grid-column: span 4;
+      }
+      .stat-card span {
+        display: block;
+        color: #94a3b8;
+        margin-bottom: 10px;
+      }
+      .stat-card strong {
+        font-size: 2rem;
+      }
+      @media (max-width: 960px) {
+        .hero-card,
+        .stat-card {
+          grid-column: span 12;
+        }
+      }

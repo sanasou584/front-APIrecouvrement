@@ -1,0 +1,39 @@
+<div class="table-shell">
+  <table>
+    <thead>
+      <tr>
+        <th>Facture</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Mode</th>
+        <th>Référence</th>
+        <th>Notes</th>
+        <th class="actions-cell">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (payment of payments(); track payment._id) {
+        <tr>
+          <td>{{ payment.invoiceId }}</td>
+          <td>{{ payment.amount | number:'1.2-2' }} €</td>
+          <td>{{ payment.paymentDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ payment.paymentMethod }}</td>
+          <td>{{ payment.reference || '—' }}</td>
+          <td>{{ payment.notes || '—' }}</td>
+          <td class="actions-cell">
+            @if (canDelete() && !deleting()) {
+              <button type="button" class="danger" (click)="remove.emit(payment._id)">Supprimer</button>
+            }
+            @if (deleting()) {
+              <span>Suppression...</span>
+            }
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty-state">Aucun paiement trouvé.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

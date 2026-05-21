@@ -1,0 +1,88 @@
+.page-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.page-header,
+.toolbar,
+.alert {
+  padding: 20px;
+  border-radius: 20px;
+  background: #0f172a;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-box input {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+button.primary {
+  height: 44px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 18px;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 10;
+}
+
+.drawer {
+  width: min(100%, 760px);
+  background: #020617;
+  border-radius: 24px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  padding: 24px;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+button.ghost {
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+@media (max-width: 860px) {
+  .page-header,
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

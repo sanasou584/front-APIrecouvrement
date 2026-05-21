@@ -1,0 +1,127 @@
+.table-shell {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background: var(--surface-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+tbody tr:hover {
+  background: var(--surface-secondary);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.empty-state {
+  text-align: center !important;
+  color: var(--text-muted);
+  padding: 32px 16px;
+}
+
+.actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.active {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.inactive {
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+/* Styles pour les boutons */
+.actions-cell button {
+  padding: 8px 16px;
+  margin-left: 8px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actions-cell button.ghost {
+  background: linear-gradient(135deg, #4183ff, #5a9eff);
+  color: white;
+  box-shadow: 0 2px 8px rgba(65, 131, 255, 0.3);
+}
+
+.actions-cell button.ghost:hover {
+  background: linear-gradient(135deg, #3070dd, #4a8eee);
+  box-shadow: 0 4px 12px rgba(65, 131, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.actions-cell button.ghost:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(65, 131, 255, 0.3);
+}
+
+.actions-cell button.danger {
+  background: linear-gradient(135deg, #ef4444, #f87171);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.actions-cell button.danger:hover {
+  background: linear-gradient(135deg, #dc2626, #e85d5d);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+.actions-cell button.danger:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(239, 68, 68, 0.3);
+}
+
+.actions-cell button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  th, td {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .actions-cell button {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    margin-left: 4px;
+  }
+}

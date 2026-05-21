@@ -1,0 +1,110 @@
+   :host {
+        display: block;
+        min-height: 100dvh;
+        background:
+          radial-gradient(circle at top left, rgba(59, 130, 246, 0.22), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.18), transparent 25%),
+          linear-gradient(180deg, #020617 0%, #0f172a 100%);
+        color: #e2e8f0;
+      }
+      .login-page {
+        min-height: 100dvh;
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        align-items: center;
+        gap: 48px;
+        padding: 48px;
+      }
+      .hero h1,
+      .login-card h2 {
+        margin: 0 0 12px;
+      }
+      .hero p,
+      .login-card p {
+        color: #94a3b8;
+        max-width: 52ch;
+      }
+      .eyebrow {
+        display: inline-flex;
+        margin-bottom: 18px;
+        padding: 8px 12px;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 999px;
+        color: #bfdbfe;
+        background: rgba(30, 41, 59, 0.55);
+      }
+      .login-card {
+        display: grid;
+        gap: 18px;
+        padding: 28px;
+        border-radius: 28px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: 0 20px 60px rgba(2, 6, 23, 0.42);
+      }
+      label {
+        display: grid;
+        gap: 8px;
+      }
+      span {
+        font-size: 0.92rem;
+        color: #cbd5e1;
+      }
+      input {
+        height: 48px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 14px;
+        padding: 0 14px;
+        background: #0f172a;
+        color: #f8fafc;
+      }
+      button {
+        height: 48px;
+        border: 0;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+      .error-box {
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(127, 29, 29, 0.5);
+        border: 1px solid rgba(248, 113, 113, 0.35);
+        color: #fecaca;
+      }
+
+      .login-footer {
+        text-align: center;
+        margin-top: 12px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+
+      .login-footer p {
+        margin: 0;
+      }
+
+      .login-footer a {
+        color: #4183ff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s;
+      }
+
+      .login-footer a:hover {
+        color: #5a9eff;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 960px) {
+        .login-page {
+          grid-template-columns: 1fr;
+          padding: 24px;
+        }
+      }

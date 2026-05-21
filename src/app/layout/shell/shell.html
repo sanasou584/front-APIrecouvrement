@@ -1,0 +1,44 @@
+<div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">R+</div>
+          <div>
+            <h1>Recouvra+</h1>
+            <p>Debt Recovery Console</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a routerLink="/app/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/app/clients" routerLinkActive="active">Clients</a>
+          <a routerLink="/app/invoices" routerLinkActive="active">Factures</a>
+          <a routerLink="/app/payments" routerLinkActive="active">Paiements</a>
+          <a routerLink="/app/actions" routerLinkActive="active">Actions</a>
+          @if (canAccessUsers()) {
+            <a routerLink="/app/users" routerLinkActive="active">Utilisateurs</a>
+          }
+          <a routerLink="/app/stats/recovery" routerLinkActive="active">Stats</a>
+        </nav>
+      </aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h2>{{ pageTitle() }}</h2>
+            <p>Gestion du recouvrement et suivi opérationnel</p>
+          </div>
+
+          <div class="user-box">
+            <div>
+              <strong>{{ authStore.user()?.name }}</strong>
+              <span>{{ authStore.user()?.role }}</span>
+            </div>
+            <button type="button" (click)="authStore.logout()">Déconnexion</button>
+          </div>
+        </header>
+
+        <main class="content">
+          <router-outlet />
+        </main>
+      </div>
+    </div>
