@@ -47,11 +47,11 @@ export const appRoutes: Routes = [
       },
       {
         path: 'invoices',
-        component: PlaceholderPage,
-        data: {
-          title: 'Factures',
-          description: 'Liste filtrée par statut et client, détail et mise à jour du statut.'
-        }
+        loadComponent: () => import('./features/invoices/orchestrateurinvoice/orchestrateurinvoice').then((m) => m.Orchestrateurinvoice)
+      },
+      {
+        path: 'invoices/:id',
+        loadComponent: () => import('./features/invoices/invoice-detail/invoice-detail').then((m) => m.InvoiceDetail)
       },
       {
         path: 'payments',

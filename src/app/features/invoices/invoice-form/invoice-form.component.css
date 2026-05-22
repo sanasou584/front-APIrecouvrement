@@ -1,0 +1,107 @@
+.invoice-form-card {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: #e2e8f0;
+}
+
+.form-header h3 {
+  margin: 0 0 8px;
+}
+
+.eyebrow,
+.subtitle {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.invoice-form {
+  display: grid;
+  gap: 16px;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+  display: grid;
+  gap: 8px;
+}
+
+span {
+  color: #cbd5e1;
+  font-size: 0.92rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.field-error {
+  color: #fca5a5;
+  font-size: 0.85rem;
+}
+
+.error-box {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(127, 29, 29, 0.5);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+button {
+  height: 44px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 16px;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.ghost {
+  background: #1e293b;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .grid.two {
+	grid-template-columns: 1fr;
+  }
+
+  .actions {
+	flex-direction: column-reverse;
+  }
+}
+

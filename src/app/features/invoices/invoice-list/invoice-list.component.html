@@ -1,0 +1,79 @@
+<section class="invoice-list card-panel">
+  <header class="list-header">
+    <div>
+      <p class="eyebrow">Factures</p>
+      <h3>Gérer les factures et leurs statuts</h3>
+      <p class="subtitle">Filtrez, recherchez et consultez le détail des factures du portefeuille.</p>
+    </div>
+
+    <div class="meta">
+      <span>{{ filtered().length }} résultat(s)</span>
+      <span>{{ loading() ? 'Chargement...' : 'À jour' }}</span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <label>
+      <span>Statut</span>
+      <select [ngModel]="selectedStatus()" (ngModelChange)="setStatusFilter($event)">
+        <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+      </select>
+    </label>
+
+    <label class="search-field">
+      <span>Recherche</span>
+      <input type="text" placeholder="ID facture, N° ou nom client" [ngModel]="searchTerm()" (ngModelChange)="setSearch($event)" />
+    </label>
+
+    <label>
+      <span>Par page</span>
+      <select [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="20">20</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>N° facture</th>
+          <th>Client</th>
+          <th>Montant</th>
+          <th>Échéance</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (inv of currentPageItems(); track inv._id || inv.id) {
+          <tr>
+            <td class="strong"><a [routerLink]="['/app/invoices', inv._id || inv.id || inv.invoiceNumber]">{{ inv._id || inv.id || inv.invoiceNumber || '—' }}</a></td>
+            <td>{{ inv.clientName || '—' }}</td>
+            <td>{{ inv.amount | number:'1.2-2' }}</td>
+            <td>{{ inv.dueDate | date:'dd/MM/yyyy' }}</td>
+            <td><span class="badge" [ngClass]="statusClass(inv.status)">{{ statusLabel(inv.status) }}</span></td>
+            <td>
+              <a class="link-button" [routerLink]="['/app/invoices', inv._id || inv.id]">Voir</a>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">
+              Aucune facture ne correspond à vos filtres.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button type="button" class="ghost" (click)="prev()" [disabled]="page() <= 1">Précédent</button>
+    <span>{{ page() }} / {{ pages() }}</span>
+    <button type="button" class="ghost" (click)="next()" [disabled]="page() >= pages()">Suivant</button>
+  </div>
+</section>
+

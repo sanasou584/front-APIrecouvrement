@@ -1,0 +1,15 @@
+<div class="orchestrateur-invoice">
+  <header class="toolbar">
+    <h2>Factures</h2>
+    <button type="button" (click)="openCreate()">Créer une facture</button>
+  </header>
+
+  <section>
+    <app-invoice-list></app-invoice-list>
+  </section>
+
+  <section *ngIf="isFormOpen()">
+    <app-invoice-form (close)="closeForm()"></app-invoice-form>
+  </section>
+</div>
+

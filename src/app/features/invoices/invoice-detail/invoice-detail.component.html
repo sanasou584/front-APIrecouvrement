@@ -1,0 +1,69 @@
+<section class="invoice-detail card-panel" *ngIf="invoice$ | async as invoice">
+  <header class="detail-header">
+    <div>
+      <p class="eyebrow">Détail facture</p>
+      <h3>Facture {{ invoice._id || invoice.id }}</h3>
+      <p class="subtitle">{{ invoice.clientName || 'Client non renseigné' }}</p>
+    </div>
+    <span class="badge" [ngClass]="'status-' + invoice.status.toLowerCase()">{{ invoice.status }}</span>
+  </header>
+
+  <div class="summary-grid">
+    <div>
+      <span>Montant</span>
+      <strong>{{ invoice.amount | number:'1.2-2' }}</strong>
+    </div>
+    <div>
+      <span>Échéance</span>
+      <strong>{{ invoice.dueDate | date:'dd/MM/yyyy' }}</strong>
+    </div>
+    <div>
+      <span>Statut</span>
+      <strong>{{ invoice.status }}</strong>
+    </div>
+    <div>
+      <span>Description</span>
+      <strong>{{ invoice.description || '—' }}</strong>
+    </div>
+  </div>
+
+  <div class="actions">
+    <label>
+      <span>Changer le statut</span>
+      <select #s [value]="invoice.status">
+        <option value="pending">En attente</option>
+        <option value="paid">Payée</option>
+        <option value="overdue">En retard</option>
+        <option value="partially_paid">Partiellement payée</option>
+      </select>
+    </label>
+    <button type="button" class="primary" (click)="changeStatus(s.value)">Mettre à jour</button>
+  </div>
+
+  <section class="panel-block">
+    <h4>Historique des paiements</h4>
+    <ul *ngIf="(payments$ | async)?.data?.length; else noPayments">
+      <li *ngFor="let p of (payments$ | async)?.data">
+        <strong>{{ p.paymentDate | date:'dd/MM/yyyy' }}</strong>
+        <span>{{ p.amount | number:'1.2-2' }} — {{ p.paymentMethod }}</span>
+      </li>
+    </ul>
+    <ng-template #noPayments>
+      <p class="empty-text">Aucun paiement rattaché à cette facture.</p>
+    </ng-template>
+  </section>
+
+  <section class="panel-block">
+    <h4>Timeline / Historique</h4>
+    <ul *ngIf="invoice.history?.length; else noHistory">
+      <li *ngFor="let h of (invoice.history || [])">
+        <strong>{{ h.changedAt | date:'short' }}</strong>
+        <span>{{ h.status }}{{ h.note ? ' — ' + h.note : '' }}</span>
+      </li>
+    </ul>
+    <ng-template #noHistory>
+      <p class="empty-text">Aucun historique de statut disponible.</p>
+    </ng-template>
+  </section>
+</section>
+

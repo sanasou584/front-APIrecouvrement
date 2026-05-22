@@ -1,0 +1,93 @@
+<section class="invoice-form-card">
+  <header class="form-header">
+    <div>
+      <p class="eyebrow">Nouvelle facture</p>
+      <h3>Créer ou modifier une facture</h3>
+      <p class="subtitle">Renseignez les informations de facturation et le statut initial.</p>
+    </div>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="submitForm()" class="invoice-form">
+    <div class="grid two">
+      <label>
+        <span>N° facture (optionnel)</span>
+        <input type="text" formControlName="invoiceNumber" placeholder="Ex: FAC-2026-001" />
+      </label>
+
+      <label>
+        <span>Statut initial</span>
+        <select formControlName="status">
+          @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="grid two">
+      <label>
+        <span>Client</span>
+          <div class="select-row">
+            <select formControlName="clientId">
+              <option value="">-- sélectionner --</option>
+              @for (c of clients(); track c._id) {
+                <option [value]="c._id">{{ c.companyName }} - {{ c.contactName }}</option>
+              }
+            </select>
+            <small class="muted">{{ clients().length }} client(s)</small>
+          </div>
+        @if (isInvalid('clientId')) {
+          <small class="field-error">Le client est obligatoire.</small>
+        }
+      </label>
+    </div>
+
+    <div class="grid two">
+      <label>
+        <span>Montant</span>
+        <input type="number" min="0.01" step="0.01" formControlName="amount" />
+        @if (isInvalid('amount')) {
+          <small class="field-error">Le montant doit être supérieur à 0.</small>
+        }
+      </label>
+
+      <label>
+        <span>Échéance</span>
+        <input type="date" [min]="minDueDate" formControlName="dueDate" />
+        @if (isInvalid('dueDate')) {
+          <small class="field-error">La date d’échéance ne peut pas être dans le passé.</small>
+        }
+      </label>
+    </div>
+
+    <label>
+      <span>Description</span>
+      <textarea rows="4" formControlName="description" placeholder="Détails complémentaires, référence, note interne..."></textarea>
+    </label>
+
+    @if (clientLoadError) {
+      <div class="error-box">{{ clientLoadError }}</div>
+    } @else if (!loadingClients && clients().length === 0) {
+      <div class="empty-box">Aucun client trouvé. <a routerLink="/app/clients">Créer un client</a></div>
+    }
+
+    @if (serverMessage) {
+      <div class="error-box">
+        <div>{{ serverMessage }}</div>
+        @if (serverErrors && serverErrors.length) {
+          <ul>
+              @for (e of serverErrors; track e) { <li>{{ e }}</li> }
+          </ul>
+        }
+      </div>
+    }
+
+    <div class="actions">
+      <button type="button" class="ghost" (click)="close.emit()">Annuler</button>
+      <button type="submit" [disabled]="form.invalid || loadingClients">
+        {{ loadingClients ? 'Chargement...' : 'Enregistrer' }}
+      </button>
+    </div>
+  </form>
+</section>
+
