@@ -1,0 +1,57 @@
+<section class="stats-page">
+  <header class="card page-header">
+    <div>
+      <p class="eyebrow">Statistiques</p>
+      <h3>Top debiteurs</h3>
+      <p class="muted">Clients classes par montant restant a recouvrer.</p>
+    </div>
+    <label>
+      <span>Limite</span>
+      <select [ngModel]="limit()" (ngModelChange)="limit.set($event); load()">
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="20">20</option>
+      </select>
+    </label>
+  </header>
+
+  @if (error()) {
+    <section class="alert error">{{ error() }}</section>
+  }
+
+  <section class="card table-card">
+    <div class="table-meta">
+      <span>{{ debtors().length }} resultat(s)</span>
+      <span>{{ loading() ? 'Chargement...' : 'A jour' }}</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Client</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>Factures impayees</th>
+            <th>Montant du</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (debtor of debtors(); track debtor.clientId) {
+            <tr>
+              <td>{{ debtor.companyName }}</td>
+              <td>{{ debtor.contactName }}</td>
+              <td>{{ debtor.email }}</td>
+              <td>{{ debtor.unpaidInvoicesCount | number }}</td>
+              <td class="strong">{{ debtor.totalAmountDue | number: '1.2-2' }}</td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-state">Aucun debiteur trouve.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

@@ -1,24 +1,77 @@
 <section class="dashboard-grid">
-      <article class="card hero-card">
-        <h3>Fondation front prête</h3>
-        <p>
-          Authentification JWT, shell applicatif, guards de rôle et routage lazy sont en place.
-          Les domaines métier peuvent maintenant être branchés proprement.
-        </p>
-      </article>
+  <article class="card hero-card">
+    <div>
+      <p class="eyebrow">Tableau de bord</p>
+      <h3>Vue globale du recouvrement</h3>
+      <p>Donnees chargees depuis <code>/api/stats/dashboard</code>.</p>
+    </div>
+    <button type="button" class="ghost" (click)="load()" [disabled]="loading()">
+      {{ loading() ? 'Chargement...' : 'Actualiser' }}
+    </button>
+  </article>
 
-      <article class="card stat-card">
-        <span>Clients</span>
-        <strong>—</strong>
-      </article>
+  @if (error()) {
+    <article class="card alert">{{ error() }}</article>
+  }
 
-      <article class="card stat-card">
-        <span>Factures</span>
-        <strong>—</strong>
-      </article>
+  @if (totals(); as t) {
+    <article class="card stat-card">
+      <span>Clients</span>
+      <strong>{{ t.totalClients | number }}</strong>
+    </article>
 
-      <article class="card stat-card">
-        <span>Encaissements</span>
-        <strong>—</strong>
-      </article>
-    </section>
+    <article class="card stat-card">
+      <span>Factures</span>
+      <strong>{{ t.totalInvoices | number }}</strong>
+    </article>
+
+    <article class="card stat-card">
+      <span>Paiements</span>
+      <strong>{{ t.totalPayments | number }}</strong>
+    </article>
+
+    <article class="card stat-card">
+      <span>Montant facture</span>
+      <strong>{{ t.totalInvoiced | number: '1.2-2' }}</strong>
+    </article>
+
+    <article class="card stat-card">
+      <span>Total encaisse</span>
+      <strong>{{ t.totalPaid | number: '1.2-2' }}</strong>
+    </article>
+
+    <article class="card stat-card">
+      <span>Reste a recouvrer</span>
+      <strong>{{ t.remainingToCollect | number: '1.2-2' }}</strong>
+    </article>
+
+    <article class="card list-card">
+      <h4>Factures par statut</h4>
+      @for (item of invoicesByStatus(); track item.status) {
+        <div class="list-row">
+          <span>{{ statusLabel(item.status) }}</span>
+          <strong>{{ item.count | number }} - {{ item.totalAmount | number: '1.2-2' }}</strong>
+        </div>
+      } @empty {
+        <p class="empty">Aucune facture.</p>
+      }
+    </article>
+
+    <article class="card list-card">
+      <h4>Actions par type</h4>
+      @for (item of actionsByType(); track item.actionType) {
+        <div class="list-row">
+          <span>{{ item.actionType }}</span>
+          <strong>{{ item.count | number }}</strong>
+        </div>
+      } @empty {
+        <p class="empty">Aucune action.</p>
+      }
+    </article>
+  } @else if (loading()) {
+    <article class="card stat-card">
+      <span>Chargement</span>
+      <strong>...</strong>
+    </article>
+  }
+</section>

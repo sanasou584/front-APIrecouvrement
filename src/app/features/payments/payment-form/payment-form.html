@@ -1,34 +1,50 @@
-<form class="payment-form" (ngSubmit)="submitForm()">
-  <div class="grid two">
-    <label>
-      <span>Facture (invoiceId)</span>
-      <input type="text" formControlName="invoiceId" placeholder="ID de la facture" />
-    </label>
-    <label>
-      <span>Montant</span>
-      <input type="number" step="0.01" formControlName="amount" placeholder="Montant" />
-    </label>
-  </div>
+<form class="payment-form" [formGroup]="form" (ngSubmit)="submitForm()">
+  <label>
+    <span>Facture</span>
+    <select formControlName="invoiceId">
+      <option value="">-- selectionner --</option>
+      @for (invoice of invoices(); track invoiceId(invoice)) {
+        <option [value]="invoiceId(invoice)">{{ invoiceLabel(invoice) }}</option>
+      }
+    </select>
+    @if (loadingInvoices()) {
+      <small class="muted">Chargement des factures...</small>
+    }
+    @if (isInvalid('invoiceId')) {
+      <small class="field-error">La facture est obligatoire.</small>
+    }
+  </label>
 
   <div class="grid two">
     <label>
-      <span>Date de paiement</span>
-      <input type="date" formControlName="paymentDate" />
+      <span>Montant</span>
+      <input type="number" step="0.01" min="0.01" formControlName="amount" placeholder="Montant" />
+      @if (isInvalid('amount')) {
+        <small class="field-error">Le montant doit etre superieur a 0.</small>
+      }
     </label>
     <label>
-      <span>Mode de paiement</span>
-      <select formControlName="paymentMethod">
-        <option value="cash">Espèces</option>
-        <option value="check">Chèque</option>
-        <option value="bank_transfer">Virement</option>
-        <option value="credit_card">Carte bancaire</option>
-      </select>
+      <span>Date de paiement</span>
+      <input type="date" [max]="maxPaymentDate" formControlName="paymentDate" />
+      @if (isInvalid('paymentDate')) {
+        <small class="field-error">La date de paiement est obligatoire.</small>
+      }
     </label>
   </div>
 
   <label>
-    <span>Référence</span>
-    <input type="text" formControlName="reference" placeholder="Référence de paiement" />
+    <span>Mode de paiement</span>
+    <select formControlName="paymentMethod">
+      <option value="cash">Especes</option>
+      <option value="check">Cheque</option>
+      <option value="bank_transfer">Virement</option>
+      <option value="credit_card">Carte bancaire</option>
+    </select>
+  </label>
+
+  <label>
+    <span>Reference</span>
+    <input type="text" formControlName="reference" placeholder="Reference de paiement" />
   </label>
 
   <label>
@@ -36,8 +52,14 @@
     <textarea rows="4" formControlName="notes" placeholder="Commentaire optionnel"></textarea>
   </label>
 
+  @if (invoiceLoadError(); as message) {
+    <div class="error-box">{{ message }}</div>
+  }
+
   <div class="actions">
     <button type="button" class="ghost" (click)="cancel.emit()">Annuler</button>
-    <button type="submit" [disabled]="disabled()">{{ submitLabel() }}</button>
+    <button type="submit" [disabled]="form.invalid || disabled() || loadingInvoices()">
+      {{ submitLabel() }}
+    </button>
   </div>
 </form>

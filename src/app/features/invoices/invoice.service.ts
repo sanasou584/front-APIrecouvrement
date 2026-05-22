@@ -40,31 +40,40 @@ export class InvoiceService {
         console.error('Failed to load invoices', err);
         return of([] as Invoice[]);
       }),
-      tap(() => this.loadingSubject.next(false))
+      tap(() => this.loadingSubject.next(false)),
     );
   }
 
   getById(id: string): Observable<Invoice | null> {
-    return this.api.getById(id).pipe(
-      map((r) => r.data ? normalizeInvoices([r.data])[0] : null)
-    );
+    return this.api.getById(id).pipe(map((r) => (r.data ? normalizeInvoices([r.data])[0] : null)));
   }
 
   create(payload: InvoicePayload): Observable<Invoice | null> {
-    return this.api.create(payload).pipe(
-      map((r) => r.data ? normalizeInvoices([r.data])[0] : null)
-    );
+    return this.api
+      .create(payload)
+      .pipe(map((r) => (r.data ? normalizeInvoices([r.data])[0] : null)));
   }
 
   update(id: string, payload: Partial<InvoicePayload>): Observable<Invoice | null> {
-    return this.api.update(id, payload).pipe(
-      map((r) => r.data ? normalizeInvoices([r.data])[0] : null)
-    );
+    return this.api
+      .update(id, payload)
+      .pipe(map((r) => (r.data ? normalizeInvoices([r.data])[0] : null)));
   }
 
   changeStatus(id: string, status: string): Observable<Invoice | null> {
-    return this.api.changeStatus(id, status).pipe(
-      map((r) => r.data ? normalizeInvoices([r.data])[0] : null)
+    return this.api
+      .changeStatus(id, status)
+      .pipe(map((r) => (r.data ? normalizeInvoices([r.data])[0] : null)));
+  }
+
+  remove(id: string): Observable<void> {
+    return this.api.remove(id).pipe(
+      tap(() => {
+        this.invoicesSubject.next(
+          this.snapshot.filter((invoice) => (invoice._id || invoice.id) !== id),
+        );
+      }),
+      map(() => undefined),
     );
   }
 
@@ -73,4 +82,3 @@ export class InvoiceService {
     return this.invoicesSubject.getValue();
   }
 }
-

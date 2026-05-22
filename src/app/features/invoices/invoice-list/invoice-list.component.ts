@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -7,6 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { InvoiceService } from '../invoice.service';
 import type { Invoice } from '../invoice.model';
 import { STATUS_LABELS } from '../invoice.model';
+import { AuthStore } from '../../../core/store/auth.store';
 
 @Component({
   selector: 'app-invoice-list',
@@ -14,11 +22,14 @@ import { STATUS_LABELS } from '../invoice.model';
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoiceListComponent implements AfterViewInit {
   private readonly invoiceService = inject(InvoiceService);
-  private readonly invoicesSignal = toSignal(this.invoiceService.invoices$, { initialValue: [] as Invoice[] });
+  private readonly authStore = inject(AuthStore);
+  private readonly invoicesSignal = toSignal(this.invoiceService.invoices$, {
+    initialValue: [] as Invoice[],
+  });
   private readonly loadingSignal = toSignal(this.invoiceService.loading$, { initialValue: false });
 
   readonly statuses = [
@@ -26,16 +37,18 @@ export class InvoiceListComponent implements AfterViewInit {
     { value: 'pending', label: 'En attente' },
     { value: 'paid', label: 'Payée' },
     { value: 'overdue', label: 'En retard' },
-    { value: 'partially_paid', label: 'Partiellement payée' }
+    { value: 'partially_paid', label: 'Partiellement payée' },
   ];
 
   readonly selectedStatus = signal<string>('ALL');
   readonly searchTerm = signal<string>('');
   readonly page = signal<number>(1);
   readonly pageSize = signal<number>(10);
+  readonly deleteError = signal<string | null>(null);
 
   readonly invoices = computed(() => this.invoicesSignal() ?? []);
   readonly loading = computed(() => this.loadingSignal());
+  readonly canDelete = computed(() => this.authStore.hasAnyRole(['admin']));
 
   readonly filtered = computed(() => {
     const all = this.invoices();
@@ -45,15 +58,16 @@ export class InvoiceListComponent implements AfterViewInit {
 
     // Filter by status
     if (st && st !== 'ALL') {
-      out = out.filter(i => i.status === st);
+      out = out.filter((i) => i.status === st);
     }
 
     // Search by invoice ID, invoice number, or client name
     if (s) {
-      out = out.filter(i =>
-        (i._id || i.id || '').toLowerCase().includes(s) ||
-        (i.invoiceNumber ?? '').toLowerCase().includes(s) ||
-        (i.clientName ?? '').toLowerCase().includes(s)
+      out = out.filter(
+        (i) =>
+          (i._id || i.id || '').toLowerCase().includes(s) ||
+          (i.invoiceNumber ?? '').toLowerCase().includes(s) ||
+          (i.clientName ?? '').toLowerCase().includes(s),
       );
     }
 
@@ -70,7 +84,6 @@ export class InvoiceListComponent implements AfterViewInit {
   constructor() {
     this.loadInvoices();
   }
-
 
   setStatusFilter(v: string): void {
     this.selectedStatus.set(v);
@@ -97,6 +110,32 @@ export class InvoiceListComponent implements AfterViewInit {
     if (this.page() < this.pages()) this.page.update((n) => n + 1);
   }
 
+  deleteInvoice(invoice: Invoice): void {
+    if (!this.canDelete()) {
+      return;
+    }
+
+    const id = invoice._id || invoice.id;
+
+    if (!id) {
+      this.deleteError.set('ID facture introuvable.');
+      return;
+    }
+
+    const confirmed = window.confirm('Supprimer cette facture ?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deleteError.set(null);
+    this.invoiceService.remove(id).subscribe({
+      error: (error) => {
+        this.deleteError.set(error?.error?.message ?? 'Suppression de la facture impossible');
+      },
+    });
+  }
+
   statusClass(status: string): string {
     return `status-${status
       .toLowerCase()
@@ -106,10 +145,12 @@ export class InvoiceListComponent implements AfterViewInit {
   }
 
   private loadInvoices(): void {
-    this.invoiceService.loadList({ status: this.selectedStatus() as any, search: this.searchTerm() }).subscribe();
+    this.invoiceService
+      .loadList({ status: this.selectedStatus() as any, search: this.searchTerm() })
+      .subscribe();
   }
 
-   ngAfterViewInit() {
+  ngAfterViewInit() {
     // Debug: Log rendered items to verify _id is present
     setTimeout(() => {
       const items = this.currentPageItems();

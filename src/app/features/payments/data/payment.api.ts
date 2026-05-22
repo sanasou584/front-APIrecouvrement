@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { APP_ENV } from '../../../core/config/env.token';
 import type { ApiSuccessResponse } from '../../../core/types/api.types';
-import type { Payment, PaymentPayload } from './payment.types';
+import type { Payment, PaymentCreateResult, PaymentPayload } from './payment.types';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentApiService {
@@ -12,7 +12,12 @@ export class PaymentApiService {
   private readonly env = inject(APP_ENV);
   private readonly baseUrl = `${this.env.apiBaseUrl}/payments`;
 
-  list(filters?: { invoiceId?: string; paymentMethod?: string; startDate?: string; endDate?: string }): Observable<ApiSuccessResponse<Payment[]>> {
+  list(filters?: {
+    invoiceId?: string;
+    paymentMethod?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Observable<ApiSuccessResponse<Payment[]>> {
     const params: Record<string, string> = {};
 
     if (filters?.invoiceId) {
@@ -34,8 +39,8 @@ export class PaymentApiService {
     return this.http.get<ApiSuccessResponse<Payment[]>>(this.baseUrl, { params });
   }
 
-  create(payload: PaymentPayload): Observable<ApiSuccessResponse<Payment>> {
-    return this.http.post<ApiSuccessResponse<Payment>>(this.baseUrl, payload);
+  create(payload: PaymentPayload): Observable<ApiSuccessResponse<PaymentCreateResult>> {
+    return this.http.post<ApiSuccessResponse<PaymentCreateResult>>(this.baseUrl, payload);
   }
 
   remove(id: string): Observable<ApiSuccessResponse<{ message?: string }>> {

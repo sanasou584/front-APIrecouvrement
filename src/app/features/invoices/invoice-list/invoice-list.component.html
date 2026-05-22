@@ -2,15 +2,21 @@
   <header class="list-header">
     <div>
       <p class="eyebrow">Factures</p>
-      <h3>Gérer les factures et leurs statuts</h3>
-      <p class="subtitle">Filtrez, recherchez et consultez le détail des factures du portefeuille.</p>
+      <h3>Gerer les factures et leurs statuts</h3>
+      <p class="subtitle">
+        Filtrez, recherchez et consultez le detail des factures du portefeuille.
+      </p>
     </div>
 
     <div class="meta">
-      <span>{{ filtered().length }} résultat(s)</span>
-      <span>{{ loading() ? 'Chargement...' : 'À jour' }}</span>
+      <span>{{ filtered().length }} resultat(s)</span>
+      <span>{{ loading() ? 'Chargement...' : 'A jour' }}</span>
     </div>
   </header>
+
+  @if (deleteError()) {
+    <div class="error-box">{{ deleteError() }}</div>
+  }
 
   <div class="controls">
     <label>
@@ -22,7 +28,12 @@
 
     <label class="search-field">
       <span>Recherche</span>
-      <input type="text" placeholder="ID facture, N° ou nom client" [ngModel]="searchTerm()" (ngModelChange)="setSearch($event)" />
+      <input
+        type="text"
+        placeholder="ID facture, numero ou nom client"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="setSearch($event)"
+      />
     </label>
 
     <label>
@@ -39,10 +50,10 @@
     <table class="table">
       <thead>
         <tr>
-          <th>N° facture</th>
+          <th>N facture</th>
           <th>Client</th>
           <th>Montant</th>
-          <th>Échéance</th>
+          <th>Echeance</th>
           <th>Statut</th>
           <th>Actions</th>
         </tr>
@@ -50,20 +61,29 @@
       <tbody>
         @for (inv of currentPageItems(); track inv._id || inv.id) {
           <tr>
-            <td class="strong"><a [routerLink]="['/app/invoices', inv._id || inv.id || inv.invoiceNumber]">{{ inv._id || inv.id || inv.invoiceNumber || '—' }}</a></td>
-            <td>{{ inv.clientName || '—' }}</td>
-            <td>{{ inv.amount | number:'1.2-2' }}</td>
-            <td>{{ inv.dueDate | date:'dd/MM/yyyy' }}</td>
-            <td><span class="badge" [ngClass]="statusClass(inv.status)">{{ statusLabel(inv.status) }}</span></td>
+            <td class="strong">
+              <a [routerLink]="['/app/invoices', inv._id || inv.id || inv.invoiceNumber]">
+                {{ inv._id || inv.id || inv.invoiceNumber || '-' }}
+              </a>
+            </td>
+            <td>{{ inv.clientName || '-' }}</td>
+            <td>{{ inv.amount | number: '1.2-2' }}</td>
+            <td>{{ inv.dueDate | date: 'dd/MM/yyyy' }}</td>
             <td>
+              <span class="badge" [ngClass]="statusClass(inv.status)">{{
+                statusLabel(inv.status)
+              }}</span>
+            </td>
+            <td class="row-actions">
               <a class="link-button" [routerLink]="['/app/invoices', inv._id || inv.id]">Voir</a>
+              @if (canDelete()) {
+                <button type="button" class="danger" (click)="deleteInvoice(inv)">Supprimer</button>
+              }
             </td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="6" class="empty-state">
-              Aucune facture ne correspond à vos filtres.
-            </td>
+            <td colspan="6" class="empty-state">Aucune facture ne correspond a vos filtres.</td>
           </tr>
         }
       </tbody>
@@ -71,9 +91,10 @@
   </div>
 
   <div class="pagination">
-    <button type="button" class="ghost" (click)="prev()" [disabled]="page() <= 1">Précédent</button>
+    <button type="button" class="ghost" (click)="prev()" [disabled]="page() <= 1">Precedent</button>
     <span>{{ page() }} / {{ pages() }}</span>
-    <button type="button" class="ghost" (click)="next()" [disabled]="page() >= pages()">Suivant</button>
+    <button type="button" class="ghost" (click)="next()" [disabled]="page() >= pages()">
+      Suivant
+    </button>
   </div>
 </section>
-

@@ -1,0 +1,51 @@
+<section class="stats-page">
+  <header class="card page-header">
+    <div>
+      <p class="eyebrow">Statistiques</p>
+      <h3>Recouvrement</h3>
+      <p class="muted">Actions, paiements, montant recouvre et factures en retard.</p>
+    </div>
+  </header>
+
+  <section class="card filters">
+    <label>
+      <span>Debut</span>
+      <input type="date" [ngModel]="startDate()" (ngModelChange)="startDate.set($event)" />
+    </label>
+    <label>
+      <span>Fin</span>
+      <input type="date" [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" />
+    </label>
+    <div class="filter-actions">
+      <button type="button" class="ghost" (click)="reset()">Reinitialiser</button>
+      <button type="button" class="primary" (click)="load()" [disabled]="loading()">
+        {{ loading() ? 'Chargement...' : 'Appliquer' }}
+      </button>
+    </div>
+  </section>
+
+  @if (error()) {
+    <section class="alert error">{{ error() }}</section>
+  }
+
+  @if (stats(); as item) {
+    <section class="metrics-grid">
+      <article class="card metric">
+        <span>Actions</span>
+        <strong>{{ item.metrics.actionsCount | number }}</strong>
+      </article>
+      <article class="card metric">
+        <span>Paiements</span>
+        <strong>{{ item.metrics.paymentsCount | number }}</strong>
+      </article>
+      <article class="card metric">
+        <span>Recouvre</span>
+        <strong>{{ item.metrics.totalRecovered | number: '1.2-2' }}</strong>
+      </article>
+      <article class="card metric">
+        <span>Factures en retard</span>
+        <strong>{{ item.metrics.overdueInvoices | number }}</strong>
+      </article>
+    </section>
+  }
+</section>

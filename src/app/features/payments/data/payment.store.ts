@@ -4,6 +4,7 @@ import { finalize } from 'rxjs';
 import { AuthStore } from '../../../core/store/auth.store';
 import type { Payment, PaymentPayload } from './payment.types';
 import { PaymentApiService } from './payment.api';
+import { getPaymentInvoiceId, normalizePayment, normalizePayments } from './payment.utils';
 
 interface PaymentState {
   items: Payment[];
@@ -23,8 +24,8 @@ const initialState: PaymentState = {
   deleting: false,
   error: null,
   filters: {
-    search: ''
-  }
+    search: '',
+  },
 };
 
 @Injectable()
@@ -40,7 +41,7 @@ export class PaymentStore {
   readonly deleting = computed(() => this.state().deleting);
   readonly error = computed(() => this.state().error);
   readonly filters = computed(() => this.state().filters);
-  readonly canManage = computed(() => this.authStore.hasAnyRole(['admin', 'manager']));
+  readonly canManage = computed(() => this.authStore.hasAnyRole(['admin', 'manager', 'agent']));
   readonly canDelete = computed(() => this.authStore.hasAnyRole(['admin', 'manager']));
 
   readonly filteredItems = computed(() => {
@@ -51,9 +52,15 @@ export class PaymentStore {
     }
 
     return this.state().items.filter((payment) =>
-      [payment.invoiceId, payment.paymentMethod, payment.reference, payment.notes]
+      [
+        getPaymentInvoiceId(payment),
+        payment.paymentMethod,
+        payment.reference,
+        payment.notes,
+        payment.invoiceStatus,
+      ]
         .filter(Boolean)
-        .some((value) => value?.toLowerCase().includes(term))
+        .some((value) => String(value).toLowerCase().includes(term)),
     );
   });
 
@@ -65,11 +72,13 @@ export class PaymentStore {
       .pipe(finalize(() => this.patchState({ loading: false })))
       .subscribe({
         next: (response) => {
-          this.patchState({ items: response.data });
+          this.patchState({ items: normalizePayments(response.data ?? []) });
         },
         error: (error) => {
-          this.patchState({ error: error?.error?.message ?? 'Chargement des paiements impossible' });
-        }
+          this.patchState({
+            error: error?.error?.message ?? 'Chargement des paiements impossible',
+          });
+        },
       });
   }
 
@@ -81,13 +90,15 @@ export class PaymentStore {
       .pipe(finalize(() => this.patchState({ saving: false })))
       .subscribe({
         next: (response) => {
-          const payment = response.data;
+          const payment = normalizePayment(response.data.payment);
           this.patchState({ items: [payment, ...this.state().items] });
           onSuccess?.(payment);
         },
         error: (error) => {
-          this.patchState({ error: error?.error?.message ?? 'Enregistrement du paiement impossible' });
-        }
+          this.patchState({
+            error: error?.error?.message ?? 'Enregistrement du paiement impossible',
+          });
+        },
       });
   }
 
@@ -103,7 +114,7 @@ export class PaymentStore {
         },
         error: (error) => {
           this.patchState({ error: error?.error?.message ?? 'Suppression du paiement impossible' });
-        }
+        },
       });
   }
 
@@ -111,8 +122,8 @@ export class PaymentStore {
     this.patchState({
       filters: {
         ...this.state().filters,
-        search
-      }
+        search,
+      },
     });
   }
 

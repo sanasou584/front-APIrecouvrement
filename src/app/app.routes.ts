@@ -1,4 +1,3 @@
-import { Allclient } from './features/clients/allclient/allclient';
 import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
@@ -11,17 +10,17 @@ export const appRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'app/dashboard'
+    redirectTo: 'app/dashboard',
   },
   {
     path: 'login',
     canActivate: [guestGuard],
-    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login)
+    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
   {
     path: 'register',
     canActivate: [guestGuard],
-    loadComponent: () => import('./features/auth/register/register').then((m) => m.Register)
+    loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
   },
   {
     path: 'app',
@@ -31,71 +30,86 @@ export const appRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard'
+        redirectTo: 'dashboard',
       },
       {
         path: 'dashboard',
-        loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard)
+        loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
         path: 'clients',
-        loadComponent: () => import('./features/clients/orchestrateurclient/orchestrateurclient').then((m) => m.Orchestrateurclient)
+        loadComponent: () =>
+          import('./features/clients/orchestrateurclient/orchestrateurclient').then(
+            (m) => m.Orchestrateurclient,
+          ),
       },
       {
-      path: 'clients/:id',
-        loadComponent: () => import('./features/clients/detailsclient/detailsclient').then((m) => m.Detailsclient)
+        path: 'clients/:id',
+        loadComponent: () =>
+          import('./features/clients/detailsclient/detailsclient').then((m) => m.Detailsclient),
       },
       {
         path: 'invoices',
-        loadComponent: () => import('./features/invoices/orchestrateurinvoice/orchestrateurinvoice').then((m) => m.Orchestrateurinvoice)
+        loadComponent: () =>
+          import('./features/invoices/orchestrateurinvoice/orchestrateurinvoice').then(
+            (m) => m.Orchestrateurinvoice,
+          ),
       },
       {
         path: 'invoices/:id',
-        loadComponent: () => import('./features/invoices/invoice-detail/invoice-detail').then((m) => m.InvoiceDetail)
+        loadComponent: () =>
+          import('./features/invoices/invoice-detail/invoice-detail').then((m) => m.InvoiceDetail),
       },
       {
         path: 'payments',
-        loadComponent: () => import('./features/payments/orchestrateurpayment/orchestrateurpayment').then((m) => m.Orchestrateurpayment)
+        loadComponent: () =>
+          import('./features/payments/orchestrateurpayment/orchestrateurpayment').then(
+            (m) => m.Orchestrateurpayment,
+          ),
       },
       {
         path: 'actions',
         component: PlaceholderPage,
         data: {
           title: 'Actions',
-          description: 'Timeline, filtres et suivi opérationnel du recouvrement.'
-        }
+          description: 'Timeline, filtres et suivi operationnel du recouvrement.',
+        },
       },
       {
         path: 'stats',
         children: [
           {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'recovery',
+          },
+          {
             path: 'recovery',
-            component: PlaceholderPage,
-            data: {
-              title: 'Recovery Stats',
-              description: 'Statistiques de recouvrement par période via /api/stats/recovery.'
-            }
+            loadComponent: () =>
+              import('./features/stats/recovery-stats/recovery-stats').then(
+                (m) => m.RecoveryStatsComponent,
+              ),
           },
           {
             path: 'top-debtors',
-            component: PlaceholderPage,
-            data: {
-              title: 'Top Debtors',
-              description: 'Classement des débiteurs les plus importants via /api/stats/top-debtors.'
-            }
-          }
-        ]
+            loadComponent: () =>
+              import('./features/stats/top-debtors/top-debtors').then((m) => m.TopDebtorsComponent),
+          },
+        ],
       },
       {
         path: 'users',
         canActivate: [roleGuard],
         data: { roles: ['admin'] },
-        loadComponent: () => import('./features/users/orchestrateuruser/orchestrateuruser').then((m) => m.Orchestrateuruser)
-      }
-    ]
+        loadComponent: () =>
+          import('./features/users/orchestrateuruser/orchestrateuruser').then(
+            (m) => m.Orchestrateuruser,
+          ),
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'app/dashboard'
-  }
+    redirectTo: 'app/dashboard',
+  },
 ];
